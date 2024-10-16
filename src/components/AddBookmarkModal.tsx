@@ -6,6 +6,7 @@ interface Bookmark {
   title: string;
   url: string;
   color: string;
+  description: string; // 新增描述字段
 }
 
 interface AddBookmarkModalProps {
@@ -26,27 +27,29 @@ const colorOptions = [
 ];
 
 const AddBookmarkModal: React.FC<AddBookmarkModalProps> = ({ onClose, onSave, editingBookmark }) => {
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [color, setColor] = useState(colorOptions[0]);
+  const [title, setTitle] = useState(editingBookmark?.title || '');
+  const [url, setUrl] = useState(editingBookmark?.url || '');
+  const [color, setColor] = useState(editingBookmark?.color || '#3B82F6');
+  const [description, setDescription] = useState(editingBookmark?.description || ''); // 新增
 
   useEffect(() => {
     if (editingBookmark) {
       setTitle(editingBookmark.title);
       setUrl(editingBookmark.url);
       setColor(editingBookmark.color);
+      setDescription(editingBookmark.description); // 新增
     }
   }, [editingBookmark]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const bookmark: Bookmark = {
-      id: editingBookmark ? editingBookmark.id : Date.now().toString(),
+    onSave({
+      id: editingBookmark?.id || Date.now().toString(),
       title,
       url,
       color,
-    };
-    onSave(bookmark);
+      description, // 新增
+    });
   };
 
   return (
@@ -85,6 +88,18 @@ const AddBookmarkModal: React.FC<AddBookmarkModalProps> = ({ onClose, onSave, ed
               onChange={(e) => setUrl(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={3}
             />
           </div>
           <div className="mb-4">

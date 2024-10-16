@@ -6,6 +6,7 @@ interface Bookmark {
   title: string;
   url: string;
   color: string;
+  description?: string;
 }
 
 interface BookmarkCardProps {
@@ -18,9 +19,12 @@ interface BookmarkCardProps {
 
 const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, onEdit, onDelete, onMoveUp, onMoveDown }) => {
   return (
-    <div className={`h-40 rounded-lg shadow-md overflow-hidden flex flex-col ${bookmark.color}`}>
+    <div className={`rounded-lg shadow-md overflow-hidden flex flex-col ${bookmark.color}`}>
       <div className="flex-grow p-4">
         <h3 className="text-xl font-semibold text-white mb-2">{bookmark.title}</h3>
+        {bookmark.description && (
+          <p className="text-sm text-white mb-2">{bookmark.description}</p>
+        )}
         <a
           href={bookmark.url}
           target="_blank"

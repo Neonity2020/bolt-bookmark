@@ -13,6 +13,7 @@ interface AddBookmarkModalProps {
   onClose: () => void;
   onSave: (bookmark: Bookmark) => void;
   editingBookmark: Bookmark | null;
+  folder: 'default' | 'custom';  // 添加这一行
 }
 
 const colorOptions = [
